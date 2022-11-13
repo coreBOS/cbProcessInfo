@@ -1,0 +1,24 @@
+{
+	"name": "coreBOS/cbProcessInfo",
+	"type": "corebos-module",
+	"properties": {
+		"name": "BPM Process Flow Information Module",
+		"description": "This module is part of the BPM perspective and serves to define a set of additional information that must be given to go from one step to the next.",
+		"keywords": ["bpm","process","flow","step"],
+		"homepage": "http://corebos.org/documentation/doku.php?id=en:extensions:extensions:cbprocessinfo",
+		"version": "1.0",
+		"time": "2022-11-13",
+		"license": "Vizsage",
+		"extra": {
+			"distribution": "Free"
+		},
+		"authors": [
+					{
+					"name": "Spike Associates"
+					}
+		],
+		"support": {
+				"email": "info(at)tsolucio(dot)com"
+		}
+	}
+}
