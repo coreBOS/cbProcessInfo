@@ -23,5 +23,6 @@ $mod_strings = array(
 	'fieldmap'=> 'Mapa Campos',
 	'valmap'=> 'Mapa Validación',
 	'depmap'=> 'Mapa Dependencia',
+	'MoreInfoNotFound' => 'No se han encontrado datos de más información. Por favor, cierra esta ventana.',
 );
 ?>
