@@ -34,6 +34,16 @@ if (!empty($_REQUEST['minfo']) && is_numeric($_REQUEST['minfo'])) {
 			'pflowid' => $_REQUEST['pflowid'],
 			'bpmrecord' => $_REQUEST['bpmrecord'],
 		]);
+		$recordID = '';
+		$qg = new QueryGenerator($check->fields['semodule'], $current_user);
+		$qg->setFields(array('*'));
+		$qg->addReferenceModuleFieldCondition($_REQUEST['bpmmodule'], 'bpminfomaster', 'id', $_REQUEST['bpmrecord'], 'e');
+		$sql = $qg->getQuery();
+		$rs = $adb->query($sql);
+		$fields = $rs->fields;
+		if ($fields) {
+			$recordID = $fields['bpminfoid'];
+		}
 		$FFMName = getEntityName('cbMap', $check->fields['fieldmap']);
 		$FFMName = $FFMName[$check->fields['fieldmap']];
 		$url = 'module='.$check->fields['semodule'].'&action=EditView&Module_Popup_Edit=1&MDCurrentRecord='.$_REQUEST['bpmrecord'];
