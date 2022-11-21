@@ -34,20 +34,30 @@ if (!empty($_REQUEST['minfo']) && is_numeric($_REQUEST['minfo'])) {
 			'pflowid' => $_REQUEST['pflowid'],
 			'bpmrecord' => $_REQUEST['bpmrecord'],
 		]);
+		$MapObject = new cbMap();
+		$Mapid = $check->fields['fieldmap'];
+		$refrenceField = '';
+		if ($check->fields['fieldmap']) {
+			$MapObject->id = $Mapid;
+			$MapObject->mode = '';
+			$MapObject->retrieve_entity_info($Mapid, "cbMap");
+			$xml = simplexml_load_string($MapObject->column_fields['content']);
+			$refrenceField = (string)$xml->linkfields->originfield;
+		}
 		$recordID = '';
 		$qg = new QueryGenerator($check->fields['semodule'], $current_user);
-		$qg->setFields(array('*'));
-		$qg->addReferenceModuleFieldCondition($_REQUEST['bpmmodule'], 'bpminfomaster', 'id', $_REQUEST['bpmrecord'], 'e');
+		$qg->setFields(array('id'));
+		$qg->addReferenceModuleFieldCondition($_REQUEST['bpmmodule'], $refrenceField, 'id', $_REQUEST['bpmrecord'], 'e');
 		$sql = $qg->getQuery();
 		$rs = $adb->query($sql);
 		$fields = $rs->fields;
 		if ($fields) {
-			$recordID = $fields['bpminfoid'];
+			$recordID = $fields['0'];
 		}
 		$FFMName = getEntityName('cbMap', $check->fields['fieldmap']);
 		$FFMName = $FFMName[$check->fields['fieldmap']];
 		$url = 'module='.$check->fields['semodule'].'&action=EditView&Module_Popup_Edit=1&MDCurrentRecord='.$_REQUEST['bpmrecord'];
-		$url.= '&record=&FILTERFIELDSMAP='.$FFMName.'&FILTERVALMAP='.$check->fields['valmap'];
+		$url.= '&record='.$recordID.'&FILTERFIELDSMAP='.$FFMName.'&FILTERVALMAP='.$check->fields['valmap'];
 		$url.= '&FILTERDEPMAP='.$check->fields['depmap'].'&Module_Popup_Save=bpmsaveinfo&Module_Popup_Save_Param='.urlencode($saveinfo);
 		header('Location: index.php?' . $url);
 		die();
