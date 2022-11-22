@@ -42,7 +42,7 @@ if (!empty($_REQUEST['minfo']) && is_numeric($_REQUEST['minfo'])) {
 			$MapObject->mode = '';
 			$MapObject->retrieve_entity_info($Mapid, "cbMap");
 			$xml = simplexml_load_string($MapObject->column_fields['content']);
-			$refrenceField = (string)$xml->linkfields->originfield;
+			$refrenceField = (string)$xml->linkfields->targetfield;
 		}
 		$recordID = '';
 		$qg = new QueryGenerator($check->fields['semodule'], $current_user);
