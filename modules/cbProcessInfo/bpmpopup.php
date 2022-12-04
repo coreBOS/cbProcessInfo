@@ -25,25 +25,30 @@ if (!empty($_REQUEST['minfo']) && is_numeric($_REQUEST['minfo'])) {
 		[$_REQUEST['minfo'], 'cbProcessInfo']
 	);
 	if ($check && $adb->num_rows($check)==1) {
-		$saveinfo = json_encode([
-			'tostate' => $_REQUEST['tostate'],
-			'fieldName' => $_REQUEST['fieldName'],
-			'bpmmodule' => $_REQUEST['bpmmodule'],
-			'uitype' => $_REQUEST['uitype'],
-			'editmode' => $_REQUEST['editmode'],
-			'pflowid' => $_REQUEST['pflowid'],
-			'bpmrecord' => $_REQUEST['bpmrecord'],
-		]);
+		$saveinfo = [
+			'tostate' => isset($_REQUEST['tostate']) ? $_REQUEST['tostate'] : '',
+			'fieldName' => isset($_REQUEST['fieldName']) ? $_REQUEST['fieldName'] : '',
+			'bpmmodule' => isset($_REQUEST['bpmmodule']) ? $_REQUEST['bpmmodule'] : '',
+			'uitype' => isset($_REQUEST['uitype']) ? $_REQUEST['uitype'] : '',
+			'editmode' => isset($_REQUEST['editmode']) ? $_REQUEST['editmode'] : '',
+			'pflowid' => isset($_REQUEST['pflowid']) ? $_REQUEST['pflowid'] : '',
+			'bpmrecord' => isset($_REQUEST['bpmrecord']) ? $_REQUEST['bpmrecord'] : '',
+			'formName' => isset($_REQUEST['formName']) ? $_REQUEST['formName'] : '',
+			'actionName' => isset($_REQUEST['actionName']) ? $_REQUEST['actionName'] : '',
+			'originField' => '',
+		];
 		$MapObject = new cbMap();
 		$Mapid = $check->fields['fieldmap'];
 		$refrenceField = '';
 		if ($check->fields['fieldmap']) {
 			$MapObject->id = $Mapid;
 			$MapObject->mode = '';
-			$MapObject->retrieve_entity_info($Mapid, "cbMap");
+			$MapObject->retrieve_entity_info($Mapid, 'cbMap');
 			$xml = simplexml_load_string($MapObject->column_fields['content']);
 			$refrenceField = (string)$xml->linkfields->targetfield;
+			$saveinfo['originField'] = (string)$xml->linkfields->originfield;
 		}
+		$saveinfo = json_encode($saveinfo);
 		$recordID = '';
 		$qg = new QueryGenerator($check->fields['semodule'], $current_user);
 		$qg->setFields(array('id'));
@@ -56,9 +61,10 @@ if (!empty($_REQUEST['minfo']) && is_numeric($_REQUEST['minfo'])) {
 		}
 		$FFMName = getEntityName('cbMap', $check->fields['fieldmap']);
 		$FFMName = $FFMName[$check->fields['fieldmap']];
+		$saveAction = (empty($_REQUEST['pflowid']) ? 'finishProcessInfo' : 'bpmsaveinfo');
 		$url = 'module='.$check->fields['semodule'].'&action=EditView&Module_Popup_Edit=1&MDCurrentRecord='.$_REQUEST['bpmrecord'];
-		$url.= '&record='.$recordID.'&FILTERFIELDSMAP='.$FFMName.'&FILTERVALMAP='.$check->fields['valmap'];
-		$url.= '&FILTERDEPMAP='.$check->fields['depmap'].'&Module_Popup_Save=bpmsaveinfo&Module_Popup_Save_Param='.urlencode($saveinfo);
+		$url.= '&record='.$recordID.'&FILTERFIELDSMAP='.$FFMName.'&FILTERVALMAP='.$check->fields['valmap'].'&'.$refrenceField.'='.$_REQUEST['bpmrecord'];
+		$url.= '&FILTERDEPMAP='.$check->fields['depmap'].'&Module_Popup_Save='.$saveAction.'&Module_Popup_Save_Param='.urlencode($saveinfo);
 		header('Location: index.php?' . $url);
 		die();
 	}
