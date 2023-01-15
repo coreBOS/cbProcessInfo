@@ -62,7 +62,11 @@ if (!empty($_REQUEST['minfo']) && is_numeric($_REQUEST['minfo'])) {
 		}
 		$FFMName = getEntityName('cbMap', $check->fields['fieldmap']);
 		$FFMName = $FFMName[$check->fields['fieldmap']];
-		$saveAction = (empty($_REQUEST['pflowid']) ? 'finishProcessInfo' : 'bpmsaveinfo');
+		if (empty($_REQUEST['savefn'])) {
+			$saveAction = (empty($_REQUEST['pflowid']) ? 'finishProcessInfo' : 'bpmsaveinfo');
+		} else {
+			$saveAction = $_REQUEST['savefn'];
+		}
 		$url = 'module='.$check->fields['semodule'].'&action=EditView&Module_Popup_Edit=1&MDCurrentRecord='.$_REQUEST['bpmrecord'];
 		$url.= '&record='.$recordID.'&FILTERFIELDSMAP='.$FFMName.'&FILTERVALMAP='.$check->fields['valmap'].'&'.$refrenceField.'='.$_REQUEST['bpmrecord'];
 		$url.= '&FILTERDEPMAP='.$check->fields['depmap'].'&Module_Popup_Save='.$saveAction.'&Module_Popup_Save_Param='.urlencode($saveinfo);
