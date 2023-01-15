@@ -48,6 +48,7 @@ if (!empty($_REQUEST['minfo']) && is_numeric($_REQUEST['minfo'])) {
 			$refrenceField = (string)$xml->linkfields->targetfield;
 			$saveinfo['originField'] = (string)$xml->linkfields->originfield;
 		}
+		$saveinfo['ProcessInfoParams'] =  isset($_REQUEST['params']) ? $_REQUEST['params'] : '';
 		$saveinfo = json_encode($saveinfo);
 		$recordID = '';
 		$qg = new QueryGenerator($check->fields['semodule'], $current_user);
