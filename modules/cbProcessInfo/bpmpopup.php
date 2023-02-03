@@ -35,6 +35,7 @@ if (!empty($_REQUEST['minfo']) && is_numeric($_REQUEST['minfo'])) {
 			'bpmrecord' => isset($_REQUEST['bpmrecord']) ? $_REQUEST['bpmrecord'] : '',
 			'formName' => isset($_REQUEST['formName']) ? $_REQUEST['formName'] : '',
 			'actionName' => isset($_REQUEST['actionName']) ? $_REQUEST['actionName'] : '',
+			'ProcessReminderID' => isset($_REQUEST['ProcessReminderID']) ? $_REQUEST['ProcessReminderID'] : '',
 			'originField' => '',
 		];
 		$MapObject = new cbMap();
