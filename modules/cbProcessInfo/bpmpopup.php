@@ -68,7 +68,8 @@ if (!empty($_REQUEST['minfo']) && is_numeric($_REQUEST['minfo'])) {
 		} else {
 			$saveAction = $_REQUEST['savefn'];
 		}
-		$url = 'module='.$check->fields['semodule'].'&action=EditView&Module_Popup_Edit=1&MDCurrentRecord='.$_REQUEST['bpmrecord'];
+		$cbfromid = isset($_REQUEST['cbfromid']) ? $_REQUEST['cbfromid'] : 0;
+		$url = 'module='.$check->fields['semodule'].'&action=EditView&Module_Popup_Edit=1&MDCurrentRecord='.$_REQUEST['bpmrecord'].'&cbfromid='.$cbfromid;
 		$url.= '&record='.$recordID.'&FILTERFIELDSMAP='.$FFMName.'&FILTERVALMAP='.$check->fields['valmap'].'&'.$refrenceField.'='.$_REQUEST['bpmrecord'];
 		$url.= '&FILTERDEPMAP='.$check->fields['depmap'].'&Module_Popup_Save='.$saveAction.'&Module_Popup_Save_Param='.urlencode($saveinfo);
 		header('Location: index.php?' . $url);
